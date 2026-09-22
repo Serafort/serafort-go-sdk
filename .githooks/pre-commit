@@ -1,0 +1,29 @@
+#!/bin/sh
+# Portable pre-commit hook for the Serafort Go SDK.
+#
+# This is a pure-Go module with no npm/Node.js involved, so Husky (an
+# npm-ecosystem tool) does not apply here. This plain POSIX shell script,
+# wired in via `git config core.hooksPath .githooks`, is the idiomatic
+# dependency-free equivalent for a Go repo.
+#
+# Enable it once per clone with:
+#   git config core.hooksPath .githooks
+
+set -e
+
+echo "[pre-commit] Checking gofmt..."
+UNFORMATTED=$(gofmt -l .)
+if [ -n "$UNFORMATTED" ]; then
+	echo "[pre-commit] The following files are not gofmt-formatted:"
+	echo "$UNFORMATTED"
+	echo "[pre-commit] Run 'gofmt -w .' and re-commit."
+	exit 1
+fi
+
+echo "[pre-commit] Running go vet..."
+go vet ./...
+
+echo "[pre-commit] Running go test..."
+go test ./...
+
+echo "[pre-commit] All checks passed."

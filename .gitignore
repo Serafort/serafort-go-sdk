@@ -1,0 +1,36 @@
+# Compiled binaries
+/serafort-go-sdk
+/serafort-go-sdk.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries and coverage
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# Go build/workspace artifacts
+*.o
+*.a
+/bin/
+/dist/
+
+# Vendored dependencies (not committed; module has zero external deps today)
+/vendor/
+
+# go.work files (local multi-module dev only)
+go.work
+go.work.sum
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / editor folders
+.idea/
+.vscode/
+*.iml
