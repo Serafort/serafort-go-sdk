@@ -34,11 +34,13 @@ func TestM2MModule_GetAccessToken_SuccessAndCache(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		atomic.AddInt32(&requestCount, 1)
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(OAuthResponse{
+		if err := json.NewEncoder(w).Encode(OAuthResponse{
 			AccessToken: "m2m_secret_token_123",
 			TokenType:   "Bearer",
 			ExpiresIn:   3600,
-		})
+		}); err != nil {
+			t.Errorf("failed to encode mock OAuth response: %v", err)
+		}
 	}))
 	defer server.Close()
 
@@ -77,11 +79,13 @@ func TestM2MModule_ThunderingHerd(t *testing.T) {
 		atomic.AddInt32(&requestCount, 1)
 		time.Sleep(50 * time.Millisecond)
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(OAuthResponse{
+		if err := json.NewEncoder(w).Encode(OAuthResponse{
 			AccessToken: "coalesced_token",
 			TokenType:   "Bearer",
 			ExpiresIn:   3600,
-		})
+		}); err != nil {
+			t.Errorf("failed to encode mock OAuth response: %v", err)
+		}
 	}))
 	defer server.Close()
 
